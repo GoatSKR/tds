@@ -5,20 +5,37 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, MapPin, Phone, Clock } from "lucide-react";
+import { Mail, MapPin, Phone, Clock, ChevronDown, X } from "lucide-react";
 import { z } from "zod";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { services } from "@/lib/services";
+import { cn } from "@/lib/utils";
 
 const schema = z.object({
   email: z.string().trim().email("Invalid email").max(255),
   phone: z.string().trim().regex(/^[+\d\s\-()]{7,20}$/, "Invalid phone number"),
   message: z.string().trim().min(10, "Tell us a bit more (min 10 chars)").max(1000),
+  services: z.array(z.string()).min(1, "Please select at least one service").max(10),
 });
 
 const Contact = () => {
   const { toast } = useToast();
-  const [form, setForm] = useState({ email: "", phone: "", message: "" });
+  const [form, setForm] = useState<{ email: string; phone: string; message: string; services: string[] }>({
+    email: "",
+    phone: "",
+    message: "",
+    services: [],
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
+
+  const toggleService = (slug: string) => {
+    setForm((f) => ({
+      ...f,
+      services: f.services.includes(slug) ? f.services.filter((s) => s !== slug) : [...f.services, slug],
+    }));
+  };
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +51,7 @@ const Contact = () => {
     setTimeout(() => {
       setLoading(false);
       toast({ title: "Message sent!", description: "We'll get back to you within 4 hours." });
-      setForm({ email: "", phone: "", message: "" });
+      setForm({ email: "", phone: "", message: "", services: [] });
     }, 800);
   };
 
@@ -83,6 +100,61 @@ const Contact = () => {
             <Label htmlFor="phone">Phone</Label>
             <Input id="phone" type="tel" maxLength={20} value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} placeholder="+91 99999 99999" />
             {errors.phone && <p className="text-xs text-destructive mt-1">{errors.phone}</p>}
+          </div>
+
+          <div>
+            <Label>Services interested in</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  className={cn(
+                    "mt-2 flex min-h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm text-left ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring",
+                  )}
+                >
+                  <span className="flex flex-wrap gap-1.5">
+                    {form.services.length === 0 ? (
+                      <span className="text-muted-foreground">Select one or more services</span>
+                    ) : (
+                      form.services.map((slug) => {
+                        const s = services.find((x) => x.slug === slug);
+                        return (
+                          <span
+                            key={slug}
+                            className="inline-flex items-center gap-1 rounded-full bg-primary/10 text-primary px-2 py-0.5 text-xs font-medium"
+                          >
+                            {s?.title}
+                            <X
+                              className="h-3 w-3 cursor-pointer hover:text-destructive"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleService(slug);
+                              }}
+                            />
+                          </span>
+                        );
+                      })
+                    )}
+                  </span>
+                  <ChevronDown className="h-4 w-4 opacity-50 shrink-0 ml-2" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[--radix-popover-trigger-width] p-2 max-h-72 overflow-auto" align="start">
+                {services.map((s) => {
+                  const checked = form.services.includes(s.slug);
+                  return (
+                    <label
+                      key={s.slug}
+                      className="flex items-center gap-2 rounded-md px-2 py-2 text-sm hover:bg-accent cursor-pointer"
+                    >
+                      <Checkbox checked={checked} onCheckedChange={() => toggleService(s.slug)} />
+                      <span>{s.title}</span>
+                    </label>
+                  );
+                })}
+              </PopoverContent>
+            </Popover>
+            {errors.services && <p className="text-xs text-destructive mt-1">{errors.services}</p>}
           </div>
 
           <div>
