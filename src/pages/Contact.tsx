@@ -52,8 +52,8 @@ const Contact = () => {
 
           <div className="space-y-5">
             {[
-              { Icon: Phone, label: "Phone", val: "+91 99999 99999" },
-              { Icon: Mail, label: "Email", val: "hello@tdsdisinfection.in" },
+              { Icon: Phone, label: "Phone", val: "+91 73812 14444" },
+              { Icon: Mail, label: "Email", val: "trushnaventures@gmail.com" },
               { Icon: MapPin, label: "Location", val: "Bhubaneswar, Odisha, India" },
               { Icon: Clock, label: "Hours", val: "Mon–Sat, 8 AM – 8 PM" },
             ].map(({ Icon, label, val }) => (
