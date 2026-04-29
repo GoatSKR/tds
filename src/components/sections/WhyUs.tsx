@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ShieldCheck, Award, Leaf, Clock, Users, Sparkles } from "lucide-react";
+import isoBadge from "@/assets/iso-9001.png";
 
 const features = [
   { icon: ShieldCheck, title: "5-Year Warranty", desc: "Industry-leading service guarantee on termite & disinfection treatments." },
@@ -20,6 +21,10 @@ export const WhyUs = () => (
         <h2 className="font-display text-4xl md:text-5xl font-extrabold text-primary">
           Built on trust. <span className="text-gradient">Backed by warranty.</span>
         </h2>
+        <div className="mt-6 inline-flex items-center gap-3 px-4 py-2 rounded-full bg-card border border-border shadow-soft">
+          <img src={isoBadge} alt="ISO 9001:2015 Certified" className="h-10 w-10 object-contain" />
+          <span className="text-sm font-semibold text-primary">ISO 9001:2015 Certified Company</span>
+        </div>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">

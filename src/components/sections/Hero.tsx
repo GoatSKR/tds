@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, ShieldCheck, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroImg from "@/assets/hero-technician.jpg";
+import isoBadge from "@/assets/iso-9001.png";
 
 export const Hero = () => {
   return (
@@ -79,18 +80,19 @@ export const Hero = () => {
             <div className="absolute inset-0 bg-gradient-to-tr from-primary/40 via-transparent to-transparent" />
           </div>
 
-          {/* Floating warranty card */}
+          {/* Floating ISO certification badge */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6, duration: 0.6 }}
-            className="absolute -left-6 top-12 glass rounded-2xl p-4 shadow-elegant border border-white/40 max-w-[200px]"
+            initial={{ opacity: 0, x: -20, rotate: -10 }} animate={{ opacity: 1, x: 0, rotate: -8 }} transition={{ delay: 0.6, duration: 0.6 }}
+            className="absolute -left-6 top-10 glass rounded-2xl p-3 shadow-elegant border border-white/40 flex items-center gap-3"
           >
-            <div className="flex items-center gap-2 mb-1">
-              <div className="h-9 w-9 rounded-xl gradient-accent grid place-items-center">
-                <ShieldCheck className="h-5 w-5 text-white" />
+            <img src={isoBadge} alt="ISO 9001:2015 Certified" className="h-16 w-16 object-contain" />
+            <div className="pr-2">
+              <div className="font-bold text-primary text-sm leading-tight">ISO 9001:2015</div>
+              <p className="text-[11px] text-muted-foreground">Certified Quality</p>
+              <div className="flex items-center gap-1 mt-1 text-[10px] text-accent font-semibold">
+                <ShieldCheck className="h-3 w-3" /> 5-Year Warranty
               </div>
-              <div className="font-bold text-primary text-sm">5 Years</div>
             </div>
-            <p className="text-xs text-muted-foreground">Warranty on every termite treatment</p>
           </motion.div>
 
           <motion.div
