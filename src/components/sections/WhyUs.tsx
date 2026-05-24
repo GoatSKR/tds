@@ -3,7 +3,7 @@ import { ShieldCheck, Award, Leaf, Clock, Users, Sparkles } from "lucide-react";
 import isoBadge from "@/assets/iso-9001.png";
 
 const features = [
-  { icon: ShieldCheck, title: "5-Year Warranty", desc: "Industry-leading service guarantee on termite & disinfection treatments." },
+  { icon: ShieldCheck, title: "5-Year Anti-Termite Warranty", desc: "Industry-leading 5-year service warranty on our anti-termite treatment." },
   { icon: Award, title: "ISO Certified", desc: "Trained, certified technicians following global safety protocols." },
   { icon: Leaf, title: "Eco-Friendly Chemicals", desc: "Government-approved, child & pet-safe formulations only." },
   { icon: Clock, title: "On-Time, Every Time", desc: "Same-day appointments and a 4-hour response window." },
