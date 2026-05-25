@@ -26,21 +26,25 @@ export const ClientsMarquee = () => (
       </p>
     </div>
     <div className="relative">
-      <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-card to-transparent z-10" />
-      <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-card to-transparent z-10" />
-      <div className="flex gap-16 items-center animate-marquee">
+      <div className="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-card to-transparent z-10" />
+      <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-card to-transparent z-10" />
+      <div className="flex gap-10 md:gap-14 items-stretch animate-marquee-fast">
         {[...clients, ...clients].map((c, i) => (
           <div
             key={i}
-            className="flex-shrink-0 h-20 w-36 grid place-items-center grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all"
-            title={c.name}
+            className="flex-shrink-0 w-32 md:w-40 flex flex-col items-center justify-end gap-2 group"
           >
-            <img
-              src={c.logo}
-              alt={`${c.name} logo`}
-              className="max-h-16 max-w-full object-contain"
-              loading="lazy"
-            />
+            <div className="h-16 md:h-20 w-full grid place-items-center opacity-90 group-hover:opacity-100 transition-opacity">
+              <img
+                src={c.logo}
+                alt={`${c.name} logo`}
+                className="max-h-14 md:max-h-16 max-w-full object-contain"
+                loading="lazy"
+              />
+            </div>
+            <p className="text-xs md:text-sm font-semibold text-muted-foreground text-center whitespace-nowrap group-hover:text-primary transition-colors">
+              {c.name}
+            </p>
           </div>
         ))}
       </div>

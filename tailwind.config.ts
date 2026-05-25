@@ -61,6 +61,7 @@ export default {
         "mist-drift": "mist-drift 9s ease-in-out infinite",
         "shield-pulse": "shield-pulse 3s ease-in-out infinite",
         "marquee": "marquee 30s linear infinite",
+        "marquee-fast": "marquee 18s linear infinite",
       },
     },
   },
