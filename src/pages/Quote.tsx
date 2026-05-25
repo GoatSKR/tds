@@ -8,55 +8,81 @@ import { useToast } from "@/hooks/use-toast";
 import { ShieldCheck, Sparkles, BadgeCheck } from "lucide-react";
 import { services } from "@/lib/services";
 import { z } from "zod";
+import { submitToBackends } from "@/lib/config";
+
+const OTHER = "__other__";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Name required").max(100),
   phone: z.string().trim().regex(/^[+\d\s\-()]{7,20}$/, "Invalid phone"),
   treatment: z.string().min(1, "Select a treatment"),
   area: z.coerce.number().min(50, "Min 50 sqft").max(1000000, "Too large"),
-  location: z.string().trim().min(2, "Required").max(120),
+  address: z.string().trim().min(3, "Address required").max(200),
+  city: z.string().trim().min(2, "City required").max(80),
   date: z.string().min(1, "Pick a date"),
+  otherService: z.string().trim().max(200).optional(),
 });
 
 const Quote = () => {
   const { toast } = useToast();
-  const [form, setForm] = useState({ name: "", phone: "", treatment: "", area: "", location: "", date: "" });
+  const [form, setForm] = useState({
+    name: "", phone: "", treatment: "", area: "", address: "", city: "", date: "", otherService: "",
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = schema.safeParse(form);
     if (!result.success) {
       const errs: Record<string, string> = {};
-      result.error.issues.forEach(i => { errs[i.path[0] as string] = i.message; });
+      result.error.issues.forEach((i) => { errs[i.path[0] as string] = i.message; });
       setErrors(errs);
+      return;
+    }
+    if (form.treatment === OTHER && !form.otherService.trim()) {
+      setErrors({ otherService: "Please describe the service you need" });
       return;
     }
     setErrors({});
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast({ title: "Quote requested!", description: "We'll call you within 4 hours with a free, custom estimate." });
-      setForm({ name: "", phone: "", treatment: "", area: "", location: "", date: "" });
-    }, 800);
+    const treatmentLabel =
+      form.treatment === OTHER ? "Other" : services.find((s) => s.slug === form.treatment)?.title || form.treatment;
+    await submitToBackends(
+      {
+        name: form.name,
+        phone: form.phone,
+        services: treatmentLabel,
+        otherService: form.otherService,
+        address: form.address,
+        city: form.city,
+        date: form.date,
+        area: form.area,
+      },
+      "quote",
+    );
+    setLoading(false);
+    toast({ title: "Quote requested!", description: "We'll call you within 4 hours with a free, custom estimate." });
+    setForm({ name: "", phone: "", treatment: "", area: "", address: "", city: "", date: "", otherService: "" });
   };
 
   return (
     <PageLayout>
       <section className="container py-16 grid lg:grid-cols-5 gap-12">
         <div className="lg:col-span-2">
-          <p className="text-sm font-semibold uppercase tracking-widest text-accent mb-3">Free Quote</p>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full gradient-accent text-white text-xs font-bold mb-4 shadow-soft">
+            <ShieldCheck className="h-3.5 w-3.5" /> Free Quote & On-Site Visit
+          </div>
           <h1 className="font-display text-5xl font-extrabold text-primary mb-5">
             Get your <span className="text-gradient">free quote</span> in 2 minutes.
           </h1>
           <p className="text-muted-foreground text-lg mb-8">
-            Tell us about your space — we'll respond with a custom, no-obligation estimate within 4 hours.
+            Tell us about your space — we'll respond with a custom, no-obligation estimate within 4 hours. Available across Odisha.
           </p>
 
           <ul className="space-y-3">
             {[
-              { Icon: ShieldCheck, t: "5-Year Warranty", d: "On every termite & disinfection treatment" },
+              { Icon: ShieldCheck, t: "5-Year Warranty", d: "On our Anti-Termite Treatment" },
               { Icon: BadgeCheck, t: "ISO Certified Team", d: "Trained, background-verified technicians" },
               { Icon: Sparkles, t: "Eco-Friendly Chemicals", d: "Safe for kids & pets" },
             ].map(({Icon, t, d}) => (
@@ -95,10 +121,25 @@ const Quote = () => {
               <SelectTrigger><SelectValue placeholder="Select a service" /></SelectTrigger>
               <SelectContent>
                 {services.map(s => <SelectItem key={s.slug} value={s.slug}>{s.title}</SelectItem>)}
+                <SelectItem value={OTHER}>Other (specify below)</SelectItem>
               </SelectContent>
             </Select>
             {errors.treatment && <p className="text-xs text-destructive mt-1">{errors.treatment}</p>}
           </div>
+
+          {form.treatment === OTHER && (
+            <div>
+              <Label htmlFor="otherService">Describe your service</Label>
+              <Input
+                id="otherService"
+                maxLength={200}
+                value={form.otherService}
+                onChange={(e) => setForm({ ...form, otherService: e.target.value })}
+                placeholder="e.g. Bee removal, wasp nest treatment…"
+              />
+              {errors.otherService && <p className="text-xs text-destructive mt-1">{errors.otherService}</p>}
+            </div>
+          )}
 
           <div className="grid sm:grid-cols-2 gap-5">
             <div>
@@ -114,13 +155,18 @@ const Quote = () => {
           </div>
 
           <div>
-            <Label htmlFor="location">Location</Label>
-            <Input id="location" maxLength={120} value={form.location} onChange={e => setForm({...form, location: e.target.value})} placeholder="Area, city" />
-            {errors.location && <p className="text-xs text-destructive mt-1">{errors.location}</p>}
+            <Label htmlFor="address">Address</Label>
+            <Input id="address" maxLength={200} value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="Building, street, landmark" />
+            {errors.address && <p className="text-xs text-destructive mt-1">{errors.address}</p>}
+          </div>
+          <div>
+            <Label htmlFor="city">City</Label>
+            <Input id="city" maxLength={80} value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder="City" />
+            {errors.city && <p className="text-xs text-destructive mt-1">{errors.city}</p>}
           </div>
 
           <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
-            {loading ? "Submitting..." : "Get My Free Quote"}
+            {loading ? "Submitting..." : "Get My Free Quote & Site Visit"}
           </Button>
         </form>
       </section>
