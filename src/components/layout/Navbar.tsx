@@ -32,19 +32,12 @@ export const Navbar = () => {
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
-        scrolled ? "glass shadow-soft py-1.5" : "bg-white/40 backdrop-blur-sm py-2"
+        scrolled ? "glass shadow-soft py-2" : "bg-transparent py-4"
       )}
     >
       <nav className="container flex items-center justify-between">
         <Link to="/" className="flex items-center group">
-          <img
-            src={logo}
-            alt="Trushna Disinfection Services logo"
-            className={cn(
-              "w-auto transition-all group-hover:scale-105",
-              scrolled ? "h-12 md:h-14" : "h-16 md:h-20"
-            )}
-          />
+          <img src={logo} alt="TDS Trushna Disinfecting Services logo" className="h-12 md:h-14 w-auto transition-transform group-hover:scale-105" />
         </Link>
 
         <div className="hidden lg:flex items-center gap-1">

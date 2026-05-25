@@ -8,26 +8,23 @@ import { useToast } from "@/hooks/use-toast";
 import { ShieldCheck, Sparkles, BadgeCheck } from "lucide-react";
 import { services } from "@/lib/services";
 import { z } from "zod";
-import { submitToBackends } from "@/lib/config";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Name required").max(100),
   phone: z.string().trim().regex(/^[+\d\s\-()]{7,20}$/, "Invalid phone"),
   treatment: z.string().min(1, "Select a treatment"),
-  otherService: z.string().trim().max(200).optional(),
   area: z.coerce.number().min(50, "Min 50 sqft").max(1000000, "Too large"),
-  address: z.string().trim().min(5, "Address required").max(255),
-  city: z.string().trim().min(2, "City required").max(80),
+  location: z.string().trim().min(2, "Required").max(120),
   date: z.string().min(1, "Pick a date"),
 });
 
 const Quote = () => {
   const { toast } = useToast();
-  const [form, setForm] = useState({ name: "", phone: "", treatment: "", otherService: "", area: "", address: "", city: "", date: "" });
+  const [form, setForm] = useState({ name: "", phone: "", treatment: "", area: "", location: "", date: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
-  const submit = async (e: React.FormEvent) => {
+  const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const result = schema.safeParse(form);
     if (!result.success) {
@@ -36,47 +33,25 @@ const Quote = () => {
       setErrors(errs);
       return;
     }
-    if (form.treatment === "other" && !form.otherService.trim()) {
-      setErrors({ otherService: "Please specify the service" });
-      return;
-    }
     setErrors({});
     setLoading(true);
-    try {
-      const serviceLabel =
-        form.treatment === "other"
-          ? `Other: ${form.otherService}`
-          : services.find((s) => s.slug === form.treatment)?.title ?? form.treatment;
-      await submitToBackends({
-        name: form.name,
-        phone: form.phone,
-        services: serviceLabel,
-        otherService: form.otherService,
-        area: form.area,
-        address: form.address,
-        city: form.city,
-        date: form.date,
-        source: "Quote Form",
-      });
-      toast({ title: "Quote requested!", description: "We'll call you within 4 hours with a free, custom estimate." });
-      setForm({ name: "", phone: "", treatment: "", otherService: "", area: "", address: "", city: "", date: "" });
-    } catch {
-      toast({ title: "Could not send", description: "Please try again or call us directly.", variant: "destructive" });
-    } finally {
+    setTimeout(() => {
       setLoading(false);
-    }
+      toast({ title: "Quote requested!", description: "We'll call you within 4 hours with a free, custom estimate." });
+      setForm({ name: "", phone: "", treatment: "", area: "", location: "", date: "" });
+    }, 800);
   };
 
   return (
     <PageLayout>
       <section className="container py-16 grid lg:grid-cols-5 gap-12">
         <div className="lg:col-span-2">
-          <p className="text-sm font-semibold uppercase tracking-widest text-accent mb-3">Free Quote & Site Visit</p>
+          <p className="text-sm font-semibold uppercase tracking-widest text-accent mb-3">Free Quote</p>
           <h1 className="font-display text-5xl font-extrabold text-primary mb-5">
-            Get your <span className="text-gradient">free quote & site visit</span> in 2 minutes.
+            Get your <span className="text-gradient">free quote</span> in 2 minutes.
           </h1>
           <p className="text-muted-foreground text-lg mb-8">
-            Tell us about your space — we'll schedule a free on-site visit and share a custom, no-obligation estimate within 4 hours.
+            Tell us about your space — we'll respond with a custom, no-obligation estimate within 4 hours.
           </p>
 
           <ul className="space-y-3">
@@ -120,20 +95,9 @@ const Quote = () => {
               <SelectTrigger><SelectValue placeholder="Select a service" /></SelectTrigger>
               <SelectContent>
                 {services.map(s => <SelectItem key={s.slug} value={s.slug}>{s.title}</SelectItem>)}
-                <SelectItem value="other">Other (specify)</SelectItem>
               </SelectContent>
             </Select>
             {errors.treatment && <p className="text-xs text-destructive mt-1">{errors.treatment}</p>}
-            {form.treatment === "other" && (
-              <Input
-                className="mt-2"
-                maxLength={200}
-                value={form.otherService}
-                onChange={(e) => setForm({ ...form, otherService: e.target.value })}
-                placeholder="Please specify the service"
-              />
-            )}
-            {errors.otherService && <p className="text-xs text-destructive mt-1">{errors.otherService}</p>}
           </div>
 
           <div className="grid sm:grid-cols-2 gap-5">
@@ -149,17 +113,10 @@ const Quote = () => {
             </div>
           </div>
 
-          <div className="grid sm:grid-cols-3 gap-3">
-            <div className="sm:col-span-2">
-              <Label htmlFor="address">Address</Label>
-              <Input id="address" maxLength={255} value={form.address} onChange={e => setForm({...form, address: e.target.value})} placeholder="Street, locality" />
-              {errors.address && <p className="text-xs text-destructive mt-1">{errors.address}</p>}
-            </div>
-            <div>
-              <Label htmlFor="city">City</Label>
-              <Input id="city" maxLength={80} value={form.city} onChange={e => setForm({...form, city: e.target.value})} placeholder="City" />
-              {errors.city && <p className="text-xs text-destructive mt-1">{errors.city}</p>}
-            </div>
+          <div>
+            <Label htmlFor="location">Location</Label>
+            <Input id="location" maxLength={120} value={form.location} onChange={e => setForm({...form, location: e.target.value})} placeholder="Area, city" />
+            {errors.location && <p className="text-xs text-destructive mt-1">{errors.location}</p>}
           </div>
 
           <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
