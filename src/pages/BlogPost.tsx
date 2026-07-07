@@ -1,6 +1,7 @@
 import { Link, useParams, Navigate } from "react-router-dom";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Button } from "@/components/ui/button";
+import { Seo } from "@/components/Seo";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { blogs } from "@/lib/blogs";
 
@@ -11,6 +12,20 @@ const BlogPost = () => {
 
   return (
     <PageLayout>
+      <Seo
+        title={`${post.title} | Trushna Disinfecting Services`}
+        description={post.excerpt}
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          headline: post.title,
+          description: post.excerpt,
+          datePublished: post.date,
+          ...(post.image ? { image: `${window.location.origin}${post.image}` } : {}),
+          author: { "@type": "Organization", name: "Trushna Disinfecting Services" },
+          publisher: { "@type": "Organization", name: "Trushna Disinfecting Services" },
+        }}
+      />
       <article className="container max-w-3xl py-16">
         <Link to="/blogs" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-6">
           <ArrowLeft className="h-4 w-4" /> Back to all articles
@@ -21,7 +36,15 @@ const BlogPost = () => {
           <Calendar className="h-4 w-4" /> {post.date} · {post.read} read
         </div>
         <div className="aspect-[16/8] rounded-2xl gradient-accent mb-10 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.35),transparent_60%)]" />
+          {post.image ? (
+            <img
+              src={post.image}
+              alt={post.title}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.35),transparent_60%)]" />
+          )}
         </div>
         <div className="prose prose-lg max-w-none space-y-5 text-foreground/90 leading-relaxed">
           {post.body.map((p, i) => (

@@ -1,6 +1,7 @@
 import { Link, useParams, Navigate } from "react-router-dom";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Button } from "@/components/ui/button";
+import { Seo } from "@/components/Seo";
 import { ArrowLeft, CheckCircle2, ShieldCheck } from "lucide-react";
 import { services } from "@/lib/services";
 
@@ -9,9 +10,23 @@ const ServiceDetail = () => {
   const service = services.find((s) => s.slug === slug);
   if (!service) return <Navigate to="/services" replace />;
   const Icon = service.icon;
+  const description = service.metaDescription ?? service.blurb;
 
   return (
     <PageLayout>
+      <Seo
+        title={`${service.title} | Trushna Disinfecting Services`}
+        description={description}
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          name: service.title,
+          description,
+          ...(service.image ? { image: `${window.location.origin}${service.image}` } : {}),
+          areaServed: "Odisha",
+          provider: { "@type": "Organization", name: "Trushna Disinfecting Services" },
+        }}
+      />
       <section className="container max-w-4xl py-16">
         <Link to="/services" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-6">
           <ArrowLeft className="h-4 w-4" /> All services
@@ -32,11 +47,65 @@ const ServiceDetail = () => {
           </div>
         )}
 
+        {service.image && (
+          <div className="aspect-[16/8] rounded-2xl overflow-hidden mb-10">
+            <img
+              src={service.image}
+              alt={`${service.title} by Trushna Disinfecting Services`}
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        )}
+
         <div className="space-y-5 text-foreground/90 leading-relaxed text-lg">
           {service.details.map((p, i) => (
             <p key={i}>{p}</p>
           ))}
         </div>
+
+        {service.process && (
+          <div className="mt-10">
+            <h2 className="font-display text-2xl font-extrabold text-primary mb-5">Our Approach</h2>
+            <div className="grid sm:grid-cols-2 gap-5">
+              {service.process.map((step, i) => (
+                <div key={step.title} className="p-5 rounded-2xl bg-card border border-border">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="h-8 w-8 rounded-full gradient-accent grid place-items-center text-white text-sm font-bold shrink-0">
+                      {i + 1}
+                    </span>
+                    <h3 className="font-display font-bold text-primary">{step.title}</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {service.image2 && (
+          <div className="aspect-[16/8] rounded-2xl overflow-hidden mt-10">
+            <img
+              src={service.image2}
+              alt={`${service.title} process by Trushna Disinfecting Services`}
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        )}
+
+        {service.benefits && (
+          <div className="mt-10 p-6 rounded-2xl bg-card border border-border">
+            <h3 className="font-display font-bold text-primary mb-4">Benefits of Professional Pest Control</h3>
+            <ul className="grid sm:grid-cols-2 gap-3">
+              {service.benefits.map((b) => (
+                <li key={b} className="flex items-center gap-2 text-sm">
+                  <CheckCircle2 className="h-4 w-4 text-accent shrink-0" /> {b}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className="mt-10 p-6 rounded-2xl bg-card border border-border">
           <h3 className="font-display font-bold text-primary mb-4">Ideal for</h3>

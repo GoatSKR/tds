@@ -4,17 +4,24 @@ import { Process } from "@/components/sections/Process";
 import { CTA } from "@/components/sections/CTA";
 import residential from "@/assets/service-residential.jpg";
 import commercial from "@/assets/service-commercial.jpg";
+import patternBg from "@/assets/pattern-bg.jpg";
 
 const Services = () => (
   <PageLayout>
-    <section className="container py-16 text-center">
-      <p className="text-sm font-semibold uppercase tracking-widest text-accent mb-3">Our Services</p>
-      <h1 className="font-display text-5xl md:text-6xl font-extrabold text-primary max-w-3xl mx-auto">
-        Complete protection, <span className="text-gradient">delivered with care.</span>
-      </h1>
-      <p className="text-muted-foreground mt-5 max-w-2xl mx-auto text-lg">
-        Residential & commercial pest control plus hospital-grade disinfection across Odisha — Anti-Termite Treatment backed by a 5-year warranty.
-      </p>
+    <section
+      className="relative py-20 text-center bg-cover bg-center"
+      style={{ backgroundImage: `url(${patternBg})` }}
+    >
+      <div className="absolute inset-0 bg-primary/85" />
+      <div className="container relative">
+        <p className="text-sm font-semibold uppercase tracking-widest text-accent mb-3">Our Services</p>
+        <h1 className="font-display text-5xl md:text-6xl font-extrabold text-primary-foreground max-w-3xl mx-auto">
+          Complete protection, <span className="text-gradient">delivered with care.</span>
+        </h1>
+        <p className="text-primary-foreground/80 mt-5 max-w-2xl mx-auto text-lg">
+          Residential & commercial pest control plus hospital-grade disinfection across Odisha — Anti-Termite Treatment backed by a 5-year warranty.
+        </p>
+      </div>
     </section>
 
     <ServicesGrid />

@@ -1,4 +1,5 @@
 import { PageLayout } from "@/components/layout/PageLayout";
+import { Seo } from "@/components/Seo";
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -6,6 +7,10 @@ import { blogs as posts } from "@/lib/blogs";
 
 const Blogs = () => (
   <PageLayout>
+    <Seo
+      title="Pest Control Blog & Tips | Trushna Disinfecting Services"
+      description="Guides on pest control, pest control near me, and pest control services — termites, cockroaches, bed bugs and more, from Trushna Disinfecting Services."
+    />
     <section className="container py-16 text-center">
       <p className="text-sm font-semibold uppercase tracking-widest text-accent mb-3">Insights</p>
       <h1 className="font-display text-5xl md:text-6xl font-extrabold text-primary">From the TDS Journal</h1>
@@ -26,7 +31,16 @@ const Blogs = () => (
         >
           <Link to={`/blogs/${p.slug}`} className="block">
             <div className="aspect-[16/10] gradient-accent relative overflow-hidden">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.3),transparent_60%)]" />
+              {p.image ? (
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.3),transparent_60%)]" />
+              )}
               <span className="absolute top-4 left-4 text-xs font-bold px-3 py-1 rounded-full bg-white/90 text-primary">{p.category}</span>
             </div>
             <div className="p-6">
