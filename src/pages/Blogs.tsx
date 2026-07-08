@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { blogs as posts } from "@/lib/blogs";
+import patternBg from "@/assets/pattern-bg2.jpg";
 
 const Blogs = () => (
   <PageLayout>
@@ -11,15 +12,21 @@ const Blogs = () => (
       title="Pest Control Blog & Tips | Trushna Disinfecting Services"
       description="Guides on pest control, pest control near me, and pest control services — termites, cockroaches, bed bugs and more, from Trushna Disinfecting Services."
     />
-    <section className="container py-16 text-center">
-      <p className="text-sm font-semibold uppercase tracking-widest text-accent mb-3">Insights</p>
-      <h1 className="font-display text-5xl md:text-6xl font-extrabold text-primary">From the TDS Journal</h1>
-      <p className="text-muted-foreground mt-5 max-w-2xl mx-auto text-lg">
-        Tips, guides and news on keeping your space pest-free and pristine.
-      </p>
+    <section
+      className="relative py-20 text-center bg-cover bg-center"
+      style={{ backgroundImage: `url(${patternBg})` }}
+    >
+      <div className="absolute inset-0 bg-primary/85" />
+      <div className="container relative">
+        <p className="text-sm font-semibold uppercase tracking-widest text-accent mb-3">Insights</p>
+        <h1 className="font-display text-5xl md:text-6xl font-extrabold text-primary-foreground">From the TDS Journal</h1>
+        <p className="text-primary-foreground/80 mt-5 max-w-2xl mx-auto text-lg">
+          Tips, guides and news on keeping your space pest-free and pristine.
+        </p>
+      </div>
     </section>
 
-    <section className="container pb-24 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section className="container pt-16 pb-24 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {posts.map((p, i) => (
         <motion.article
           key={p.title}
