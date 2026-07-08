@@ -18,10 +18,9 @@ export const config = {
   // Paste a Google Maps embed URL here (Share → Embed a map → copy `src`)
   mapEmbedUrl: "https://www.google.com/maps?q=Berhampur,+Odisha&output=embed",
   social: {
-    facebook: "#",
-    instagram: "#",
-    linkedin: "#",
-    justdial: "https://share.google/JFlWy7SZeeertKVns",
+    facebook: "https://www.facebook.com/trushnadisinfectingservices/",
+    instagram: "https://www.instagram.com/trushnadisinfectingservices/",
+    justdial: "https://www.justdial.com/Berhampur-Odisha/Trushna-Disinfecting-Services-Ganjam-Hill-Patna/9999PX680-X680-200902115247-V3G1_BZDET",
     google: "https://share.google/JFlWy7SZeeertKVns",
   },
   // FormSubmit (free, no setup — first submission triggers email-confirm at the inbox above)

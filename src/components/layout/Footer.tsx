@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, MapPin, Phone, ShieldCheck, Facebook, Instagram, Linkedin, Star } from "lucide-react";
+import { Mail, MapPin, Phone, ShieldCheck, Facebook, Instagram, Star } from "lucide-react";
 import logo from "@/assets/tds-logo.png";
 import { config } from "@/lib/config";
 
@@ -20,7 +20,6 @@ export const Footer = () => (
           {[
             { Icon: Facebook, href: config.social.facebook, label: "Facebook" },
             { Icon: Instagram, href: config.social.instagram, label: "Instagram" },
-            { Icon: Linkedin, href: config.social.linkedin, label: "LinkedIn" },
             { Icon: Star, href: config.social.justdial, label: "Justdial" },
           ].map(({ Icon, href, label }) => (
             <a

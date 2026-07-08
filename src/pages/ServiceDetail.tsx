@@ -17,6 +17,7 @@ const ServiceDetail = () => {
       <Seo
         title={`${service.title} | Trushna Disinfecting Services`}
         description={description}
+        image={service.image}
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "Service",
@@ -53,6 +54,7 @@ const ServiceDetail = () => {
               src={service.image}
               alt={`${service.title} by Trushna Disinfecting Services`}
               className="h-full w-full object-cover"
+              style={{ objectPosition: service.imagePosition ?? "center" }}
               loading="lazy"
             />
           </div>

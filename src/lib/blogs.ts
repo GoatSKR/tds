@@ -30,6 +30,7 @@ export const blogs: BlogPost[] = [
       "Don't let pests take over your home or business. Contact Trushna Disinfecting Services today and experience the difference of working with a trusted, local pest control provider — reliable pest control near you is just a call away.",
     ],
   },
+  /*
   {
     slug: "5-signs-termite-problem",
     title: "5 Signs You Have a Termite Problem (and What to Do)",
@@ -117,4 +118,5 @@ export const blogs: BlogPost[] = [
       "Most kitchens are roach-free within 14 days and stay that way for 6+ months with a single application.",
     ],
   },
+  */
 ];

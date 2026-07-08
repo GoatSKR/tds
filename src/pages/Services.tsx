@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { Process } from "@/components/sections/Process";
@@ -27,15 +28,15 @@ const Services = () => (
     <ServicesGrid />
 
     <section className="container py-20 grid lg:grid-cols-2 gap-8">
-      {[{ img: residential, title: "Residential", desc: "Homes, apartments, villas — safe for kids & pets." }, { img: commercial, title: "Commercial", desc: "Offices, restaurants, hotels, hospitals & schools." }].map((c) => (
-        <div key={c.title} className="group relative rounded-[2rem] overflow-hidden aspect-[4/3] shadow-elegant">
+      {[{ img: residential, title: "Residential", desc: "Homes, apartments, villas — safe for kids & pets.", to: "/services/residential" }, { img: commercial, title: "Commercial", desc: "Offices, restaurants, hotels, hospitals & schools.", to: "/services/industrial" }].map((c) => (
+        <Link key={c.title} to={c.to} className="group relative rounded-[2rem] overflow-hidden aspect-[4/3] shadow-elegant block">
           <img src={c.img} alt={c.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent" />
           <div className="absolute bottom-0 p-8 text-primary-foreground">
             <h3 className="font-display text-3xl font-extrabold mb-1">{c.title}</h3>
             <p className="opacity-90">{c.desc}</p>
           </div>
-        </div>
+        </Link>
       ))}
     </section>
 
