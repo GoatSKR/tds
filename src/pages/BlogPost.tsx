@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ const BlogPost = () => {
       <Seo
         title={`${post.title} | Trushna Disinfecting Services`}
         description={post.excerpt}
+        image={post.image}
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "BlogPosting",
@@ -48,7 +50,17 @@ const BlogPost = () => {
         </div>
         <div className="prose prose-lg max-w-none space-y-5 text-foreground/90 leading-relaxed">
           {post.body.map((p, i) => (
-            <p key={i}>{p}</p>
+            <Fragment key={i}>
+              <p>{p}</p>
+              {(post.contentImage || post.image) && i === Math.floor(post.body.length / 2) - 1 && (
+                <img
+                  src={post.contentImage || post.image}
+                  alt={post.title}
+                  className="w-full rounded-2xl object-cover aspect-[16/9]"
+                  loading="lazy"
+                />
+              )}
+            </Fragment>
           ))}
         </div>
         <div className="mt-12 p-6 rounded-2xl gradient-card border border-border flex flex-wrap items-center justify-between gap-4">
